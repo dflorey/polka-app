@@ -41,9 +41,11 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.open(CACHE).then(async (cache) => {
       const cached = await cache.match(request, { ignoreSearch: true });
+      // A link to a shared take (?take=…) is the same page, so it is cached once, without the query
+      const key = url.search ? url.origin + url.pathname : request;
       const fresh = () =>
         fetch(request).then((response) => {
-          if (response.ok) cache.put(request, response.clone());
+          if (response.ok) cache.put(key, response.clone());
           return response;
         });
       if (url.pathname.includes('/sounds/')) return cached ?? fresh();
