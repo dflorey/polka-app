@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Polka FS-3: a vintage-style music app from the FS family." />
-    <meta name="theme-color" content="#1a1816" />
+    <meta name="theme-color" content="#24211d" />
     <title>Polka FS-3</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23ff2a14'/%3E%3C/svg%3E" />
     <!-- Installable app: manifest for Android/Chrome, meta tags and touch icon for iOS home screens -->
@@ -15,6 +15,11 @@
     <meta name="apple-mobile-web-app-title" content="Polka" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     
+    <script>
+      // On its own (not embedded in another page) the page gets a solid backdrop; embedded, it
+      // stays transparent so the host page shows around the device.
+      if (window.self === window.top) document.documentElement.classList.add('solo');
+    </script>
     <style>
       body {
         margin: 0;
@@ -48,12 +53,20 @@
        */
       @media (display-mode: standalone) {
         html {
-          background: #1a1816;
+          background: #24211d;
           overflow: hidden;
         }
         body {
           overscroll-behavior: none;
         }
+      }
+      /*
+       * On its own page the device sits on a solid warm charcoal, a little lighter than the panel
+       * so the case's drop shadow still reads, and matching the theme colour.
+       */
+      html.solo {
+        min-height: 100%;
+        background: #24211d;
       }
       polka-app:not(:defined) {
         display: none;
