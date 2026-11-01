@@ -5,7 +5,7 @@
 // away and refreshed in the background. The recordings (about 12 MB) are only taken from the cache,
 // never fetched again: bump CACHE to drop everything cached by an older version, and always when a
 // recording changes.
-const CACHE = 'polka-v3';
+const CACHE = 'polka-v4';
 const SHELL = ['./', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 // Every file band-engine.ts loads
 const SOUNDS = [
@@ -33,7 +33,8 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))))
+      // Only this app's old caches: the FS apps share one origin, so its other apps' caches are here too
+      .then((keys) => Promise.all(keys.filter((key) => key.startsWith('polka-') && key !== CACHE).map((key) => caches.delete(key))))
       .then(() => self.clients.claim())
   );
 });
